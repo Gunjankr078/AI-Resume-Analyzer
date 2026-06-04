@@ -3,6 +3,10 @@ package com.gunjan.airesumeanalyzer.controller;
 // import java.io.IOException;
 import java.util.List;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import com.gunjan.airesumeanalyzer.dto.JobMatchResponse;
+
 import org.springframework.web.bind.annotation.*;
 import com.gunjan.airesumeanalyzer.dto.ResumeAnalysisResponse;
 
@@ -39,10 +43,30 @@ public class ResumeController {
 
         String resumeText = pdfService.extractText(file);
 
-        ResumeAnalysisResponse analysis = ollamaService.analyzeResume(
-                resumeText);
+        ResumeAnalysisResponse analysis = ollamaService.analyzeResume(resumeText);
+
+        ObjectMapper mapper = new ObjectMapper();
+
+        String analysisJson = mapper.writeValueAsString(analysis);
+
+        resumeAnalysisService.saveAnalysis(
+                file.getOriginalFilename(),
+                analysisJson);
 
         return analysis;
+    }
+
+    @PostMapping("/match")
+    public JobMatchResponse matchResume(
+            @RequestParam("file") MultipartFile file,
+            @RequestParam("jobDescription") String jobDescription)
+            throws Exception {
+
+        String resumeText = pdfService.extractText(file);
+
+        return ollamaService.matchResumeWithJob(
+                resumeText,
+                jobDescription);
     }
 
     @GetMapping("/history")

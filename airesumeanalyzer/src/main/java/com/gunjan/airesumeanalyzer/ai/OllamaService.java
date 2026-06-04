@@ -1,5 +1,7 @@
 package com.gunjan.airesumeanalyzer.ai;
 
+import com.gunjan.airesumeanalyzer.dto.JobMatchResponse;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gunjan.airesumeanalyzer.dto.ResumeAnalysisResponse;
 
@@ -57,7 +59,7 @@ public class OllamaService {
                                                 """;
 
                 Map<String, Object> request = Map.of(
-                                "model", "llama3.2:1b",
+                                "model", "llama3.2:3b",
                                 "prompt", prompt,
                                 "stream", false);
 
@@ -75,5 +77,69 @@ public class OllamaService {
                 return mapper.readValue(
                                 jsonResponse,
                                 ResumeAnalysisResponse.class);
+        }
+
+        public JobMatchResponse matchResumeWithJob(
+                        String resumeText,
+                        String jobDescription) throws Exception {
+
+                String prompt = """
+                                                                You are an ATS Resume Matching System.
+
+                                                                Compare the resume and job description.
+
+                                                                Calculate:
+                                                                1. Match score from 0-100.
+                                                                2. Missing keywords from the job description that do not appear in the resume.
+                                                                3. Recommendations to improve the resume.
+
+                                                                Return ONLY valid JSON:
+
+                                                                {
+                                                                  "matchScore": 0,
+                                                                  "missingKeywords": [],
+                                                                  "recommendations": []
+                                                                }
+
+                                Rules:
+                                - matchScore must be calculated based on skill overlap.
+                                - If 50% of required skills are present, score should be around 50.
+                                - If 70% of required skills are present, score should be around 70.
+                                - Do not return 0 unless none of the required skills match.
+                                - Do not return 100 unless almost all required skills match.
+                                - Do not return 0 unless the resume is completely unrelated.
+                                - Compare skills, frameworks, tools, cloud platforms, databases, and technologies.
+                                - missingKeywords should contain only missing skills.
+                                - recommendations should explain how to improve the match.
+                                - Return ONLY JSON.
+
+                                                                Resume:
+                                                                """
+                                + resumeText +
+
+                                """
+
+                                                Job Description:
+                                                """ + jobDescription;
+
+                Map<String, Object> request = Map.of(
+                                "model", "llama3.2:3b",
+                                "prompt", prompt,
+                                "stream", false);
+
+                String url = "http://localhost:11434/api/generate";
+
+                Map<?, ?> response = restTemplate.postForObject(
+                                url,
+                                request,
+                                Map.class);
+
+                String json = response.get("response").toString();
+
+                ObjectMapper mapper = new ObjectMapper();
+
+                return mapper.readValue(
+                                json,
+                                JobMatchResponse.class);
         }
 }
