@@ -55,6 +55,14 @@ MySQL Storage
 ↓
 React Dashboard
 
+## Screenshots
+
+Add screenshots of:
+
+* Resume Upload
+* Resume Analysis
+* ATS Matching
+* Analysis History
 
 ## Getting Started
 
