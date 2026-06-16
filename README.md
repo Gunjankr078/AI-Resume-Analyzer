@@ -2,6 +2,8 @@
 
 An AI-powered Resume Analyzer and ATS Matcher built using React, Spring Boot, MySQL, and Google Gemini AI.
 
+🚀 Live Demo: https://ai-resume-analyzer-beta-five.vercel.app
+
 ## Features
 
 * User Registration & Login
