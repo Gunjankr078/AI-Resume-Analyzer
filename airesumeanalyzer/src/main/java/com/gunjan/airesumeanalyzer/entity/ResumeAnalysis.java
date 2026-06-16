@@ -19,17 +19,23 @@ public class ResumeAnalysis {
 
     private LocalDateTime createdAt;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
     public ResumeAnalysis() {
     }
 
     public ResumeAnalysis(
             String fileName,
             String analysis,
-            LocalDateTime createdAt) {
+            LocalDateTime createdAt,
+            User user) {
 
         this.fileName = fileName;
         this.analysis = analysis;
         this.createdAt = createdAt;
+        this.user = user;
     }
 
     public Long getId() {
@@ -46,5 +52,25 @@ public class ResumeAnalysis {
 
     public LocalDateTime getCreatedAt() {
         return createdAt;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
+    }
+
+    public void setAnalysis(String analysis) {
+        this.analysis = analysis;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
     }
 }

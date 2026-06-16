@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import Navbar from "../components/Navbar";
 
 import UploadCard from "../components/UploadCard";
 import AnalysisCard from "../components/AnalysisCard";
 import HistoryCard from "../components/HistoryCard";
 
 function Home() {
+  const userName = localStorage.getItem("userName");
   const [file, setFile] = useState(null);
   const [result, setResult] = useState(null);
   const [history, setHistory] = useState([]);
@@ -15,13 +17,22 @@ function Home() {
   const [jobMatch, setJobMatch] = useState(null);
 
   useEffect(() => {
+    const userId = localStorage.getItem("userId");
+
+    if (!userId) {
+      window.location.href = "/login";
+      return;
+    }
+
     loadHistory();
   }, []);
 
   const loadHistory = async () => {
     try {
+      const userId = localStorage.getItem("userId");
+
       const response = await axios.get(
-        "http://localhost:8080/api/resume/history",
+        `http://localhost:8080/api/resume/history/${userId}`,
       );
 
       setHistory(response.data);
@@ -39,6 +50,8 @@ function Home() {
     const formData = new FormData();
 
     formData.append("file", file);
+
+    formData.append("userId", localStorage.getItem("userId"));
 
     try {
       setLoading(true);
@@ -133,76 +146,105 @@ function Home() {
         : "bg-danger";
 
   return (
-    <div
-      style={{
-        minHeight: "100vh",
-        background: "linear-gradient(135deg,#0f172a,#1e293b,#334155)",
-      }}
-    >
-      <div className="container py-5">
-        {loading && (
-          <div
-            className="card shadow-lg border-0 mx-auto mb-4"
-            style={{
-              maxWidth: "900px",
-              borderRadius: "20px",
-            }}
-          >
-            <div className="card-body text-center p-4">
-              <div
-                className="spinner-border text-primary mb-3"
-                role="status"
-              ></div>
+    <>
+      <Navbar />
 
-              <h5>{loadingMessage}</h5>
+      <div
+        style={{
+          minHeight: "100vh",
+          background: "linear-gradient(135deg,#0f172a,#1e293b,#334155)",
+        }}
+      >
+        <div className="container-fluid py-5 px-4">
+          {loading && (
+            <div
+              style={{
+                position: "fixed",
+                top: 0,
+                left: 0,
+                width: "100%",
+                height: "100%",
+                background: "rgba(0,0,0,0.6)",
+                backdropFilter: "blur(5px)",
+                zIndex: 9999,
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <div
+                className="card shadow-lg border-0"
+                style={{
+                  width: "500px",
+                  borderRadius: "25px",
+                }}
+              >
+                <div className="card-body text-center p-5">
+                  <img
+                    src="https://cdn-icons-png.flaticon.com/512/4712/4712109.png"
+                    alt="AI"
+                    width="80"
+                    className="mb-3"
+                  />
+
+                  <h3 className="fw-bold mb-3">AI Processing Resume</h3>
+
+                  <p
+                    className="text-muted"
+                    style={{
+                      fontSize: "18px",
+                    }}
+                  >
+                    {loadingMessage}
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
+          <div className="text-center text-white mb-5">
+            <h1 className="fw-bold">Welcome, {userName} 👋</h1>
+
+            <p>Analyze your resume using AI and get ATS insights</p>
+          </div>
+
+          <div className="row mb-4">
+            <div className="col-md-4 mb-3">
+              <div className="card shadow border-0">
+                <div className="card-body text-center">
+                  <h5>Total Analyses</h5>
+                  <h2>{history.length}</h2>
+                </div>
+              </div>
+            </div>
+
+            <div className="col-md-4 mb-3">
+              <div className="card shadow border-0">
+                <div className="card-body text-center">
+                  <h5>User</h5>
+                  <h2>{userName}</h2>
+                </div>
+              </div>
+            </div>
+
+            <div className="col-md-4 mb-3">
+              <div className="card shadow border-0">
+                <div className="card-body text-center">
+                  <h5>Latest Resume</h5>
+                  <h6>{history[0]?.fileName || "No Resume"}</h6>
+                </div>
+              </div>
             </div>
           </div>
-        )}
-        <div className="text-center text-white mb-5">
-          <h1 className="fw-bold">AI Resume Analyzer</h1>
 
-          <p>Analyze your resume using AI and get ATS insights</p>
-        </div>
+          <UploadCard
+            file={file}
+            setFile={setFile}
+            handleUpload={handleUpload}
+            loading={loading}
+          />
 
-        <UploadCard
-          file={file}
-          setFile={setFile}
-          handleUpload={handleUpload}
-          loading={loading}
-        />
+          {/* JOB DESCRIPTION CARD */}
 
-        {/* JOB DESCRIPTION CARD */}
-
-        <div
-          className="card shadow-lg border-0 mx-auto mt-4"
-          style={{
-            maxWidth: "900px",
-            borderRadius: "20px",
-          }}
-        >
-          <div className="card-body p-4">
-            <h3 className="mb-3">🎯 Job Description Matching</h3>
-
-            <textarea
-              className="form-control"
-              rows="8"
-              placeholder="Paste Job Description Here..."
-              value={jobDescription}
-              onChange={(e) => setJobDescription(e.target.value)}
-            />
-
-            <button
-              className="btn btn-success mt-3 w-100"
-              onClick={handleJobMatch}
-            >
-              Match Resume
-            </button>
-          </div>
-        </div>
-
-        <AnalysisCard result={result} />
-
-        {jobMatch && (
           <div
             className="card shadow-lg border-0 mx-auto mt-4"
             style={{
@@ -211,54 +253,85 @@ function Home() {
             }}
           >
             <div className="card-body p-4">
-              <h3 className="text-center mb-4">🎯 ATS Match Result</h3>
+              <h3 className="mb-3">🎯 Job Description Matching</h3>
 
-              <p className="text-center text-muted mb-2">
-                Resume: {file?.name}
-              </p>
+              <textarea
+                className="form-control"
+                rows="8"
+                placeholder="Paste Job Description Here..."
+                value={jobDescription}
+                onChange={(e) => setJobDescription(e.target.value)}
+              />
 
-              <h2 className="text-center">
-                Match Score: {jobMatch.matchScore}%
-              </h2>
-
-              <div className="progress mt-3 mb-4" style={{ height: "30px" }}>
-                <div
-                  className={`progress-bar ${scoreColor}`}
-                  style={{
-                    width: `${jobMatch.matchScore}%`,
-                  }}
-                >
-                  {jobMatch.matchScore}%
-                </div>
-              </div>
-
-              <h4>❌ Missing Keywords</h4>
-
-              <div className="mb-4">
-                {jobMatch.missingKeywords?.map((skill, index) => (
-                  <span key={index} className="badge bg-danger me-2 mb-2 p-2">
-                    {skill}
-                  </span>
-                ))}
-              </div>
-
-              <h4>💡 Recommendations</h4>
-
-              <ul className="list-group">
-                {jobMatch.recommendations?.map((item, index) => (
-                  <li key={index} className="list-group-item">
-                    {item}
-                  </li>
-                ))}
-              </ul>
+              <button
+                className="btn btn-success mt-3 w-100"
+                onClick={handleJobMatch}
+              >
+                Match Resume
+              </button>
             </div>
           </div>
-        )}
 
-        {console.log(history)}
-        <HistoryCard history={history} />
-      </div>
-    </div>
+          <AnalysisCard result={result} />
+
+          {jobMatch && (
+            <div
+              className="card shadow-lg border-0 mx-auto mt-4"
+              style={{
+                maxWidth: "900px",
+                borderRadius: "20px",
+              }}
+            >
+              <div className="card-body p-4">
+                <h3 className="text-center mb-4">🎯 ATS Match Result</h3>
+
+                <p className="text-center text-muted mb-2">
+                  Resume: {file?.name}
+                </p>
+
+                <h2 className="text-center">
+                  Match Score: {jobMatch.matchScore}%
+                </h2>
+
+                <div className="progress mt-3 mb-4" style={{ height: "30px" }}>
+                  <div
+                    className={`progress-bar ${scoreColor}`}
+                    style={{
+                      width: `${jobMatch.matchScore}%`,
+                    }}
+                  >
+                    {jobMatch.matchScore}%
+                  </div>
+                </div>
+
+                <h4>❌ Missing Keywords</h4>
+
+                <div className="mb-4">
+                  {jobMatch.missingKeywords?.map((skill, index) => (
+                    <span key={index} className="badge bg-danger me-2 mb-2 p-2">
+                      {skill}
+                    </span>
+                  ))}
+                </div>
+
+                <h4>💡 Recommendations</h4>
+
+                <ul className="list-group">
+                  {jobMatch.recommendations?.map((item, index) => (
+                    <li key={index} className="list-group-item">
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          )}
+
+          {/* {console.log(history)} */}
+          <HistoryCard history={history} />
+        </div>
+      </div>    
+    </>
   );
 }
 

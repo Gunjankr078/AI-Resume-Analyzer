@@ -12,6 +12,7 @@ import com.gunjan.airesumeanalyzer.dto.ResumeAnalysisResponse;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import com.gunjan.airesumeanalyzer.ai.GeminiService;
 import com.gunjan.airesumeanalyzer.ai.OllamaService;
 import com.gunjan.airesumeanalyzer.entity.ResumeAnalysis;
 import com.gunjan.airesumeanalyzer.service.PdfService;
@@ -23,38 +24,47 @@ import com.gunjan.airesumeanalyzer.service.ResumeAnalysisService;
 public class ResumeController {
 
     private final PdfService pdfService;
-    private final OllamaService ollamaService;
+    private final GeminiService geminiService;
     private final ResumeAnalysisService resumeAnalysisService;
 
     public ResumeController(
-            PdfService pdfService,
-            OllamaService ollamaService,
-            ResumeAnalysisService resumeAnalysisService) {
+        PdfService pdfService,
+        GeminiService geminiService,
+        ResumeAnalysisService resumeAnalysisService) {
 
         this.pdfService = pdfService;
-        this.ollamaService = ollamaService;
+        this.geminiService = geminiService;
         this.resumeAnalysisService = resumeAnalysisService;
     }
 
-    @PostMapping("/analyze")
-    public ResumeAnalysisResponse analyzeResume(
-            @RequestParam("file") MultipartFile file)
-            throws Exception {
+@PostMapping("/analyze")
+public ResumeAnalysisResponse analyzeResume(
+        @RequestParam("file") MultipartFile file,
+        @RequestParam("userId") Long userId)
+        throws Exception {
 
-        String resumeText = pdfService.extractText(file);
+    System.out.println("==========");
+    System.out.println("USER ID = " + userId);
+    System.out.println("FILE = " + file.getOriginalFilename());
+    System.out.println("==========");
 
-        ResumeAnalysisResponse analysis = ollamaService.analyzeResume(resumeText);
+    String resumeText = pdfService.extractText(file);
 
-        ObjectMapper mapper = new ObjectMapper();
+    ResumeAnalysisResponse analysis =
+        geminiService.analyzeResume(resumeText);
 
-        String analysisJson = mapper.writeValueAsString(analysis);
+    ObjectMapper mapper = new ObjectMapper();
 
-        resumeAnalysisService.saveAnalysis(
-                file.getOriginalFilename(),
-                analysisJson);
+    String analysisJson =
+            mapper.writeValueAsString(analysis);
 
-        return analysis;
-    }
+    resumeAnalysisService.saveAnalysis(
+            file.getOriginalFilename(),
+            analysisJson,
+            userId);
+
+    return analysis;
+}
 
     @PostMapping("/match")
     public JobMatchResponse matchResume(
@@ -64,13 +74,16 @@ public class ResumeController {
 
         String resumeText = pdfService.extractText(file);
 
-        return ollamaService.matchResumeWithJob(
-                resumeText,
-                jobDescription);
+        return geminiService.matchResumeWithJob(
+        resumeText,
+        jobDescription);
     }
 
-    @GetMapping("/history")
-    public List<ResumeAnalysis> getHistory() {
-        return resumeAnalysisService.getAllAnalyses();
-    }
+    @GetMapping("/history/{userId}")
+public List<ResumeAnalysis> getHistory(
+        @PathVariable Long userId) {
+
+    return resumeAnalysisService
+            .getUserAnalyses(userId);
+}
 }

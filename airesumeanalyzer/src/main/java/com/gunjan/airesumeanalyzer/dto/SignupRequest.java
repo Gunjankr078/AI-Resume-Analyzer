@@ -1,34 +1,12 @@
-package com.gunjan.airesumeanalyzer.entity;
+package com.gunjan.airesumeanalyzer.dto;
 
-import jakarta.persistence.*;
-
-@Entity
-@Table(name = "users")
-public class User {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class SignupRequest {
 
     private String name;
-
-    @Column(unique = true)
     private String email;
-
     private String password;
 
-    public User() {
-    }
-
-    public User(String name, String email, String password) {
-        this.name = name;
-        this.email = email;
-        this.password = password;
-    }
-
-    public Long getId() {
-        return id;
-    }
+    public SignupRequest() {}
 
     public String getName() {
         return name;
