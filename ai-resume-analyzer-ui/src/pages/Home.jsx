@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
+import api from "../services/api";
 import Navbar from "../components/Navbar";
 
 import UploadCard from "../components/UploadCard";
@@ -31,9 +31,7 @@ function Home() {
     try {
       const userId = localStorage.getItem("userId");
 
-      const response = await axios.get(
-        `http://localhost:8080/api/resume/history/${userId}`,
-      );
+      const response = await api.get(`/api/resume/history/${userId}`);
 
       setHistory(response.data);
     } catch (error) {
@@ -69,12 +67,8 @@ function Home() {
       await new Promise((resolve) => setTimeout(resolve, 1000));
       setLoading(true);
 
-      const response = await axios.post(
-        "http://localhost:8080/api/resume/analyze",
-        formData,
-      );
-
-      setResult(response.data);
+      const response = await api.post("/api/resume/analyze", formData);
+          setResult(response.data);
 
       loadHistory();
     } catch (error) {
@@ -123,10 +117,7 @@ function Home() {
 
       setLoadingMessage("💡 Generating recommendations...");
 
-      const response = await axios.post(
-        "http://localhost:8080/api/resume/match",
-        formData,
-      );
+      const response = await api.post("/api/resume/match", formData);
 
       setJobMatch(response.data);
     } catch (error) {

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import axios from "axios";
+import api from "../services/api";
 
 function Signup() {
   const [name, setName] = useState("");
@@ -21,8 +21,7 @@ function Signup() {
     try {
       setLoading(true);
 
-      await axios.post(
-        "http://localhost:8080/api/users/signup",
+      await api.post("/api/users/signup",
         {
           name,
           email,

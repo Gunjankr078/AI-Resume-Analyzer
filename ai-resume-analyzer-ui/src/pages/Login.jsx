@@ -1,5 +1,5 @@
 import { useState } from "react";
-import axios from "axios";
+import api from "../services/api";
 import { motion } from "framer-motion";
 import { FaUserCircle } from "react-icons/fa";
 import "../assets/login.css";
@@ -10,13 +10,13 @@ function Login() {
 
   const handleLogin = async () => {
     try {
-      const response = await axios.post(
-        "http://localhost:8080/api/users/login",
-        {
-          email,
-          password,
-        },
-      );
+  const response = await api.post(
+    "/api/users/login",
+    {
+      email,
+      password,
+    }
+  );
 
       localStorage.setItem("userId", response.data.userId);
 

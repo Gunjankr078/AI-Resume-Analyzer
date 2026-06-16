@@ -1,5 +1,7 @@
 import axios from "axios";
 
-export default axios.create({
-  baseURL: "http://localhost:8080/api",
+const api = axios.create({
+  baseURL: "https://ai-resume-analyzer-production-0da6.up.railway.app"
 });
+
+export default api;
