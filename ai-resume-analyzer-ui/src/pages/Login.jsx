@@ -2,7 +2,7 @@ import { useState } from "react";
 import axios from "axios";
 import { motion } from "framer-motion";
 import { FaUserCircle } from "react-icons/fa";
-import "../assets/Login.css";
+import "../assets/login.css";
 
 function Login() {
   const [email, setEmail] = useState("");
