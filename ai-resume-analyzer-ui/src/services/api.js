@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "https://ai-resume-analyzer-production-0da6.up.railway.app"
+  baseURL: "https://ai-resume-analyzer-eulc.onrender.com"
 });
 
 export default api;

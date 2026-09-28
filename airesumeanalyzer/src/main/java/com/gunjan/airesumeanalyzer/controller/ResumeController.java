@@ -18,8 +18,7 @@ import com.gunjan.airesumeanalyzer.entity.ResumeAnalysis;
 import com.gunjan.airesumeanalyzer.service.PdfService;
 import com.gunjan.airesumeanalyzer.service.ResumeAnalysisService;
 
-@CrossOrigin(origins = "http://localhost:5173")
-@RestController
+@CrossOrigin(origins = "https://ai-resume-analyzer-beta-five.vercel.app")@RestController
 @RequestMapping("/api/resume")
 public class ResumeController {
 
