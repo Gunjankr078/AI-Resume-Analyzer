@@ -5,7 +5,7 @@ function AnalysisCard({ result }) {
     <div
       className="card shadow-lg border-0 mx-auto mt-4"
       style={{
-        maxWidth: "1200px",
+        maxWidth: "900px",
         borderRadius: "20px",
       }}
     >

@@ -8,7 +8,8 @@ function Signup() {
   const [confirmPassword, setConfirmPassword] =
     useState("");
 
-  const [loading, setLoading] = useState(false);
+const [loading, setLoading] = useState(false);
+const [showSuccess, setShowSuccess] = useState(false);
 
   const handleSignup = async (e) => {
     e.preventDefault();
@@ -29,9 +30,7 @@ function Signup() {
         }
       );
 
-      alert("Account Created Successfully!");
-
-      window.location.href = "/login";
+      setShowSuccess(true);
     } catch (error) {
       console.error(error);
 
@@ -45,6 +44,27 @@ function Signup() {
   };
 
   return (
+
+     <>
+    {showSuccess && (
+      <div className="signup-success-overlay">
+        <div className="signup-success-popup">
+          <div className="success-icon">✓</div>
+
+          <h2>Account Created Successfully!</h2>
+
+          <p>Please login again to access your AI Resume Dashboard.</p>
+
+          <button
+            onClick={() => {
+              window.location.href = "/login";
+            }}
+          >
+            Login Now
+          </button>
+        </div>
+      </div>
+    )}
     <div
       className="container-fluid"
       style={{
@@ -240,6 +260,7 @@ function Signup() {
 
       </div>
     </div>
+    </>
   );
 }
 

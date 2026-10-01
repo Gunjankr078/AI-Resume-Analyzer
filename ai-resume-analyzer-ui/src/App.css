@@ -1,4 +1,4 @@
-.counter {
+/* .counter {
   font-size: 16px;
   padding: 5px 10px;
   border-radius: 5px;
@@ -180,5 +180,471 @@
   &::after {
     right: 0;
     border-right-color: var(--border);
+  }
+}  */
+
+/* ============================= */
+/* Premium AI Dashboard */
+/* ============================= */
+
+.dashboard-page {
+  position: relative;
+  min-height: 100vh;
+  width: 100%;
+  overflow: hidden;
+  background: #020617;
+}
+
+.dashboard-background-video {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.dashboard-video-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(2, 6, 23, 0.62);
+  z-index: 1;
+  pointer-events: none;
+}
+
+.dashboard-page > .dashboard-container {
+  position: relative;
+  z-index: 2;
+}
+
+.dashboard-container {
+  width: 100%;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.dashboard-content {
+  width: 100%;
+}
+
+/* ============================= */
+/* Dashboard Header */
+/* ============================= */
+
+.dashboard-page > .dashboard-container h1 {
+  color: #ffffff;
+  font-size: 36px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+}
+
+.dashboard-page > .dashboard-container p {
+  color: #cbd5e1;
+}
+
+/* ============================= */
+/* ALL MAIN CONTAINERS */
+/* ============================= */
+
+.dashboard-page .card,
+.dashboard-page .dashboard-card {
+  width: 100% !important;
+  max-width: 1000px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  border-radius: 20px !important;
+
+  border: 1px solid rgba(255, 255, 255, 0.35) !important;
+
+  background: rgba(255, 255, 255, 0.15);
+
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+
+  box-shadow:
+    0 15px 40px rgba(0, 0, 0, 0.20),
+    0 0 1px rgba(255, 255, 255, 0.4);
+
+  overflow: hidden;
+}
+
+/* ============================= */
+/* STATISTICS */
+/* ============================= */
+
+.dashboard-card {
+  margin-bottom: 24px;
+}
+
+.dashboard-card-body {
+  width: 100%;
+  padding: 14px;
+}
+
+.stats-grid {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
+
+.stat-card {
+  height: 125px;
+  min-width: 0;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  text-align: center;
+  padding: 18px 20px;
+
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
+
+  overflow: hidden;
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.stat-card:hover {
+  transform: translateY(-3px);
+
+  box-shadow:
+    0 10px 25px rgba(15, 23, 42, 0.12);
+}
+
+.stat-card h5 {
+  margin: 0 0 8px;
+
+  color: #64748b;
+
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.stat-card h2 {
+  color: #111827;
+  font-size: 22px;
+  font-weight: 700;
+  margin: 0;
+
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ============================= */
+/* UPLOAD / JOB / HISTORY */
+/* ============================= */
+
+.dashboard-page .card-body {
+  padding: 28px;
+}
+
+.dashboard-page .card h3 {
+  color: #0f172a;
+  font-weight: 700;
+}
+
+.dashboard-page .card h4 {
+  color: #1e293b;
+  font-weight: 600;
+}
+
+/* ============================= */
+/* INPUTS */
+/* ============================= */
+
+.dashboard-page textarea,
+.dashboard-page input[type="file"] {
+  border-radius: 10px;
+}
+
+.dashboard-page textarea {
+  min-height: 180px;
+
+  border: 1px solid #cbd5e1;
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.dashboard-page textarea:focus {
+  border-color: #6366f1;
+
+  box-shadow:
+    0 0 0 3px rgba(99, 102, 241, 0.15);
+}
+
+/* ============================= */
+/* BUTTONS */
+/* ============================= */
+
+.dashboard-page .btn {
+  border-radius: 10px;
+
+  font-weight: 600;
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.dashboard-page .btn:hover {
+  transform: translateY(-1px);
+
+  box-shadow:
+    0 6px 15px rgba(0, 0, 0, 0.15);
+}
+
+/* ============================= */
+/* HISTORY TABLE */
+/* ============================= */
+
+.dashboard-page .table {
+  margin-bottom: 0;
+}
+
+.dashboard-page .table th {
+  color: #475569;
+  font-weight: 700;
+}
+
+.dashboard-page .table td {
+  color: #334155;
+}
+
+/* ============================= */
+/* RESPONSIVE */
+/* ============================= */
+
+@media (max-width: 768px) {
+
+  .dashboard-page {
+    padding: 25px 15px 45px;
+  }
+
+  .dashboard-page > .dashboard-container h1 {
+    font-size: 28px;
+  }
+
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .dashboard-page .card-body {
+    padding: 20px;
+  }
+}
+
+/* ================================
+   UPLOAD RESUME CARD
+================================ */
+
+.upload-card {
+  width: 100%;
+  margin: 0 auto 24px;
+  background: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: 18px;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.18);
+  overflow: hidden;
+}
+
+.upload-card-body {
+  padding: 36px 28px;
+  text-align: center;
+}
+
+.upload-title {
+  margin: 0 0 8px;
+  color: #111827;
+  font-size: 26px;
+  font-weight: 700;
+}
+
+.upload-subtitle {
+  margin: 0 0 24px;
+  color: #6b7280;
+  font-size: 14px;
+}
+
+.upload-dropzone {
+  width: 100%;
+  min-height: 150px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  padding: 24px;
+
+  border: 2px dashed #cbd5e1;
+  border-radius: 14px;
+
+  background: #f8fafc;
+
+  cursor: pointer;
+
+  transition:
+    border-color 0.2s ease,
+    background 0.2s ease,
+    transform 0.2s ease;
+}
+
+.upload-dropzone:hover {
+  border-color: #2563eb;
+  background: #eff6ff;
+  transform: translateY(-2px);
+}
+
+.dropzone-icon {
+  font-size: 30px;
+  color: #2563eb;
+  margin-bottom: 10px;
+}
+
+.dropzone-title {
+  color: #111827;
+  font-size: 16px;
+  font-weight: 600;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dropzone-text {
+  margin-top: 6px;
+  color: #64748b;
+  font-size: 13px;
+}
+
+.upload-dropzone input {
+  display: none;
+}
+
+.upload-button {
+  width: 100%;
+  margin-top: 20px;
+  padding: 12px 20px;
+
+  border: none;
+  border-radius: 10px;
+
+  font-weight: 600;
+  font-size: 15px;
+}
+
+.upload-button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.navbar {
+  position: relative;
+  z-index: 10;
+}
+
+.signup-success-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: rgba(2, 6, 23, 0.65);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.signup-success-popup {
+  width: min(90%, 450px);
+  padding: 40px 35px;
+
+  text-align: center;
+
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  border-radius: 24px;
+
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.35);
+
+  animation: signupPopupIn 0.35s ease-out;
+}
+
+.success-icon {
+  width: 70px;
+  height: 70px;
+  margin: 0 auto 20px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background: #22c55e;
+  color: white;
+
+  font-size: 38px;
+  font-weight: 700;
+}
+
+.signup-success-popup h2 {
+  margin-bottom: 12px;
+  color: #0f172a;
+  font-size: 25px;
+  font-weight: 700;
+}
+
+.signup-success-popup p {
+  margin-bottom: 25px;
+  color: #64748b;
+}
+
+.signup-success-popup button {
+  width: 100%;
+  padding: 12px 20px;
+
+  border: none;
+  border-radius: 10px;
+
+  background: #2563eb;
+  color: white;
+
+  font-size: 15px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.signup-success-popup button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(37, 99, 235, 0.3);
+}
+
+@keyframes signupPopupIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
   }
 }

@@ -1,50 +1,39 @@
 import { FaFileUpload } from "react-icons/fa";
 
-function UploadCard({
-  file,
-  setFile,
-  handleUpload,
-  loading,
-}) {
+function UploadCard({ file, setFile, handleUpload, loading }) {
   return (
-    <div
-      className="card shadow-lg border-0 mx-auto"
-      style={{
-        maxWidth: "700px",
-        borderRadius: "20px",
-      }}
-    >
-      <div className="card-body p-5">
+    <div className="upload-card">
+      <div className="upload-card-body">
+        <h2 className="upload-title">Upload Resume</h2>
 
-        <div className="text-center mb-4">
-          <FaFileUpload
-            size={50}
-            className="text-primary"
+        <p className="upload-subtitle">
+          Upload your PDF resume and let AI analyze it
+        </p>
+
+        <label className="upload-dropzone">
+          <FaFileUpload className="dropzone-icon" />
+
+          <span className="dropzone-title">
+            {file ? file.name : "Choose your resume"}
+          </span>
+
+          <span className="dropzone-text">
+            PDF files only • Maximum size 10MB
+          </span>
+
+          <input
+            type="file"
+            accept=".pdf"
+            onChange={(e) => setFile(e.target.files[0])}
           />
-        </div>
-
-        <h3 className="text-center mb-4">
-          Upload Resume
-        </h3>
-
-        <input
-          type="file"
-          className="form-control mb-4"
-          accept=".pdf"
-          onChange={(e) =>
-            setFile(e.target.files[0])
-          }
-        />
+        </label>
 
         <button
-          className="btn btn-primary w-100 py-3"
+          className="btn btn-primary upload-button"
           onClick={handleUpload}
+          disabled={loading}
         >
-          {
-            loading
-              ? "Analyzing..."
-              : "Analyze Resume"
-          }
+          {loading ? "Analyzing..." : "Analyze Resume"}
         </button>
 
       </div>
