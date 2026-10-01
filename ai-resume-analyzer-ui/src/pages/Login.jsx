@@ -33,7 +33,7 @@ function Login() {
             autoPlay
             playsInline
             onEnded={() => {
-              window.location.href = "/";
+              window.location.href = "/dashboard";
             }}
           >
             <source src="/welcome-intro.mp4" type="video/mp4" />
@@ -42,7 +42,7 @@ function Login() {
           <button
             className="skip-intro-btn"
             onClick={() => {
-              window.location.href = "/";
+              window.location.href = "/dashboard";
             }}
           >
             Skip Welcome Video
